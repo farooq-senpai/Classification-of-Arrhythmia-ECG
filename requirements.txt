@@ -1,4 +1,4 @@
-streamlit
+flask
 joblib
 numpy
 pandas
