@@ -3,7 +3,7 @@
 ## Live Demo
 
 🔗 **Live Application:**  
-[https://your-replit-app-link-here  ](https://classification-of-arrhythmia-ecg--farooq-senpai.replit.app/)
+[LIVE WORKING LINK ](https://classification-of-arrhythmia-ecg--farooq-senpai.replit.app/)
 
 ---
 
