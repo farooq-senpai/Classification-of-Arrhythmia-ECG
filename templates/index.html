@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arrhythmia Classifier</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                <h1>PulseAI</h1>
+            </div>
+            <p class="subtitle">Advanced ECG Arrhythmia Detection</p>
+        </header>
+
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="analyze">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="icon"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22 12H18L15 21L9 3L6 12H2" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                Diagnosis
+            </button>
+            <button class="tab-btn" data-tab="digitize">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" class="icon"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M7 10L12 15L17 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                    <path d="M12 15V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round" />
+                </svg>
+                Digitizer
+            </button>
+        </nav>
+
+        <main>
+            <!-- Diagnosis Section -->
+            <section id="analyzeSection" class="tab-content active">
+                <div class="card upload-card" id="analyzeUploadCard">
+                    <div class="card-content">
+                        <h2>Analyze ECG Data</h2>
+                        <p class="description">Upload your patient's ECG data (CSV format) to detect potential
+                            arrhythmias using our AI diagnostic tool.</p>
+
+                        <div class="drop-zone" id="dropZoneAnalyze">
+                            <div class="icon-container">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                    <path d="M17 8L12 3L7 8" stroke="currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                    <path d="M12 3V15" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <p class="drop-text">Drag & Drop CSV file here or <span class="browse-link">Browse</span>
+                            </p>
+                            <input type="file" id="fileInputAnalyze" accept=".csv" hidden>
+                            <div class="file-info" id="fileInfoAnalyze" style="display: none;">
+                                <span class="file-name">filename.csv</span>
+                                <button class="remove-file" id="removeFileAnalyze">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button id="analyzeBtn" class="btn-primary" disabled>
+                            <span>Run Diagnosis</span>
+                            <div class="spinner" id="spinnerAnalyze"></div>
+                        </button>
+
+                        <div class="error-message" id="errorAnalyze"></div>
+                    </div>
+                </div>
+
+                <div class="card result-card" id="resultCardAnalyze">
+                    <div class="card-content">
+                        <div class="result-header">
+                            <h3>Diagnostic Result</h3>
+                            <div class="confidence-badge">AI Confidence: High</div>
+                        </div>
+
+                        <div class="result-body">
+                            <div class="diagnosis-text">
+                                <span class="label">Classification:</span>
+                                <h2 class="value" id="resultValue">Normal</h2>
+                            </div>
+                        </div>
+
+                        <div class="result-footer">
+                            <p class="disclaimer">Note: This is an AI-assisted tool. Verification by a medical
+                                professional is required.</p>
+                            <button class="btn-secondary" id="resetBtnAnalyze">Analyze New File</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Digitizer Section -->
+            <section id="digitizeSection" class="tab-content" style="display: none;">
+                <div class="card upload-card" id="digitizeUploadCard">
+                    <div class="card-content">
+                        <h2>ECG to CSV Converter</h2>
+                        <p class="description">Convert legacy ECG images (PNG, JPG) into raw digital CSV data for
+                            archiving.</p>
+
+                        <div class="drop-zone" id="dropZoneDigitize">
+                            <div class="icon-container">
+                                <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </div>
+                            <p class="drop-text">Drag & Drop Image here or <span class="browse-link">Browse</span></p>
+                            <input type="file" id="fileInputDigitize" accept=".png,.jpg,.jpeg" hidden>
+                            <div class="file-info" id="fileInfoDigitize" style="display: none;">
+                                <span class="file-name">image.png</span>
+                                <button class="remove-file" id="removeFileDigitize">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M18 6L6 18" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                        <path d="M6 6L18 18" stroke="currentColor" stroke-width="2"
+                                            stroke-linecap="round" stroke-linejoin="round" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+
+                        <button id="digitizeBtn" class="btn-primary" disabled>
+                            <span>Convert to CSV</span>
+                            <div class="spinner" id="spinnerDigitize"></div>
+                        </button>
+
+                        <div class="error-message" id="errorDigitize"></div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+
+        <footer>
+            <p>&copy; 2024 PulseAI Diagnostics. Research Prototype.</p>
+        </footer>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>
